@@ -1,0 +1,134 @@
+mysql> select studno, name, grade from student where grade = (select grade from student where userid = "jun123");
++--------+--------+-------+
+| studno | name   | grade |
++--------+--------+-------+
+|  10101 | 전인하 |     4 |
+|  10107 | 이광훈 |     4 |
+|  10202 | 오유석 |     4 |
++--------+--------+-------+
+
+mysql> select name, deptno, weight from student where weight
+ < (select avg(weight) from student where deptno = 101);
++--------+--------+--------+
+| name   | deptno | weight |
++--------+--------+--------+
+| 박미경 |    101 |     52 |
+| 지은경 |    101 |     42 |
+| 임유진 |    101 |     54 |
+| 김진영 |    102 |     48 |
+| 이동훈 |    201 |     64 |
+| 김진경 |    201 |     51 |
+| 조명훈 |    201 |     62 |
++--------+--------+--------+
+
+mysql> select s.name, weight, s.deptno, p.name from student as s inner join professor as p on s.profno = p.profno where weight < (select avg(weight) from student where deptno = (select deptno from student where name = '이광훈'));
++--------+--------+--------+--------+
+| name   | weight | deptno | name   |
++--------+--------+--------+--------+
+| 김진경 |     51 |    201 | 이재우 |
+| 김진영 |     48 |    102 | 권혁일 |
+| 지은경 |     42 |    101 | 전은지 |
+| 임유진 |     54 |    101 | 전은지 |
++--------+--------+--------+--------+
+
+mysql> select name, grade, height from student where grade = (select grade from student where studno = '20101') and heig
+ht > (select height from student where studno = '20101');
++--------+-------+--------+
+| name   | grade | height |
++--------+-------+--------+
+| 서재진 |     1 |    186 |
+| 박동진 |     1 |    182 |
+| 조명훈 |     1 |    184 |
++--------+-------+--------+
+
+mysql> select studno, d.dname, grade, name from student as s inner join department as d on s.deptno = d.deptno
+where s.deptno in (select deptno from department where dname like '%공학%'
+
+where d.dname like '공학';
+Empty set (1.22 sec)
+
+=> deptno 여러 개 이므로 in 사용하기, % 양옆에...
+
+=> Column 'name' in field list is ambiguous : should specify which which table each name column belongs to. Because the column name exists in both the student and professor tables.
+
+# insert / update / delete (data)
+
+mysql> insert into department values (103, '인터넷정보과', '공학관');
+Query OK, 1 row affected (1.44 sec)
+
+mysql> select * from department;
++--------+----------------+--------+
+| deptno | dname          | loc    |
++--------+----------------+--------+
+|    101 | 컴퓨터공학과   | 1호관  |
+|    102 | 멀티미디어학과 | 2호관  |
+|    103 | 인터넷정보과   | 공학관 |
+|    201 | 전자공학과     | 3호관  |
+|    202 | 기계공학과     | 4호관  |
++--------+----------------+--------+
+
+mysql> update department set loc='5호관' where loc='공학관';
+Query OK, 1 row affected (1.45 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from department;
++--------+----------------+-------+
+| deptno | dname          | loc   |
++--------+----------------+-------+
+|    101 | 컴퓨터공학과   | 1호관 |
+|    102 | 멀티미디어학과 | 2호관 |
+|    103 | 인터넷정보과   | 5호관 |
+|    201 | 전자공학과     | 3호관 |
+|    202 | 기계공학과     | 4호관 |
++--------+----------------+-------+
+
+mysql> delete from department where deptno > 300;
+Query OK, 0 rows affected (0.00 sec)
+
+# create / delete (database)
+
+mysql> create database `testdb` default charset `utf8`;
+Query OK, 1 row affected, 1 warning (1.51 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| myschool           |
+| mysql              |
+| performance_schema |
+| sys                |
+| testdb             |
++--------------------+
+6 rows in set (0.04 sec)
+
+mysql> drop database `testdb`;
+Query OK, 0 rows affected (0.13 sec)
+
+# insert / update / delete (table)
+
+mysql> create table `test_table` (
+    -> `id` int(11) not null primary key auto_increment comment 'column1',
+    -> `user_id` varchar(30) not null comment 'column2'
+    -> ) engine=innodb default charset `utf8`;
+Query OK, 0 rows affected, 2 warnings (1.84 sec)
+
+mysql> desc `test_table`;
++---------+-------------+------+-----+---------+----------------+
+| Field   | Type        | Null | Key | Default | Extra
+|
++---------+-------------+------+-----+---------+----------------+
+| id      | int         | NO   | PRI | NULL    | auto_increment |
+| user_id | varchar(30) | NO   |     | NULL    |
+|
++---------+-------------+------+-----+---------+----------------+
+2 rows in set (0.03 sec)
+
+mysql> alter table `test_table` change 
+//rename add change drop
+
+# 참조 하면 n쪽부터 지우고 1쪽 지울 수 있음
+
+# 백업, 복구
+

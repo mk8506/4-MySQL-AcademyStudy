@@ -1,0 +1,166 @@
+java: replace <-> javascript: replaceAll
+DB: substring(a, i, n) <-> java: substring(i, i)
+DB: left(a, i), right(a, i)
+DB: ltrim, rtrim <-> java: trim (only!!)
+md5 ---- 암호화 해서 출력, 복호화 불가능, 조회 사용X, 저장 수정만 사용
+
+4-3, 5-3, 6, 7, 8 don't read it. 특히 7,8은 완전 버리기, 나머지는 면접시 질문할 수 있음- 혼자 공부하는 SQL 책
+
+in a,b,c
+like '%김%'
+desc
+limit
+is null/ is not null
+
+okay so even you might think something is really hard and stressing you out, well at the end or just minutes passed and you will feel better, i mean better, by really feeling good. Don't worry, ofcourse i don't but the current is not the same as the future.
+
+앱 열고 닫는 게 cpu 더 차지하고 여러 개 열어놓는다고 메모리는 별 변화없네. 열고 닫는 것만 주의하고. 이렇게 타자치는 것도 cpu 10%나 올림. 앱 열고 닫으면 20% 올라가고
+
+(기본 이름 3자라고 생각하고)
+mysql> select name, concat(left(name,1), '*', right(name,1)) from student;
++--------+------------------------------------------+
+| name   | concat(left(name,1), '*', right(name,1)) |
++--------+------------------------------------------+
+| 전인하 | 전*하                                    |
+| 박미경 | 박*경                                    |
+| 김영균 | 김*균                                    |
+| 지은경 | 지*경                                    |
+| 임유진 | 임*진                                    |
+| 서재진 | 서*진                                    |
+| 이광훈 | 이*훈                                    |
+| 류민정 | 류*정                                    |
+| 김진영 | 김*영                                    |
+| 오유석 | 오*석                                    |
+| 하나리 | 하*리                                    |
+| 윤진욱 | 윤*욱                                    |
+| 이동훈 | 이*훈                                    |
+| 박동진 | 박*진                                    |
+| 김진경 | 김*경                                    |
+| 조명훈 | 조*훈                                    |
++--------+------------------------------------------+
+
+L4 -> load balancing
+
+
+date_format();
+date_add();
+
+count(*) //*는 count()에서만 처리속도가 빠름, 다른 데서는 쓰지 않기
+
+where date_format(birthdate, %Y) > 1980;
+mysql> select name, birthdate from student where birthdate >= date_add(now(), interval -44 year);
++--------+---------------------+
+| name   | birthdate           |
++--------+---------------------+
+| 박미경 | 1984-05-16 00:00:00 |
+| 김영균 | 1981-03-21 00:00:00 |
+| 임유진 | 1983-01-21 00:00:00 |
+| 서재진 | 1985-11-29 00:00:00 |
+| 이광훈 | 1981-09-13 00:00:00 |
+| 류민정 | 1981-08-19 00:00:00 |
+| 김진영 | 1982-06-06 00:00:00 |
+| 하나리 | 1985-01-09 00:00:00 |
+| 이동훈 | 1983-12-10 00:00:00 |
+| 박동진 | 1985-11-24 00:00:00 |
+| 김진경 | 1983-02-28 00:00:00 |
+| 조명훈 | 1984-12-14 00:00:00 |
++--------+---------------------+
+
+srsly I hate it. whatever that is. I don't like it. so what
+I don't like waiting! it's wasting my time. what do I do?
+but what should I do? I don't need to do anything, but it makes me feel like it
+
+
+where는 별칭 사용가능
+group by는 order by 바로 전에, 별칭 사용 불가능
+group by에 명시하지 않은(그룹되지 않은) 컬럼은 집계함수로 처리.
+집계함수: count, max, min, etc
+
+group by 써야하는 이유: 집계함수는 여러 데이터에 대해 값이 하나밖에 없음.
+
+count(*) //all, group by에서는 그 group 에 포함된 데어터 개수
+count(comm) //without null
+
+group by 뒤에 having 집계함수
+
+avg(weight) as avgweight -> order by avgweight
+mysql> select deptno, avg(weight), count(*) from student group by deptno order by avg(weight) desc;
++--------+-------------+----------+
+| deptno | avg(weight) | count(*) |
++--------+-------------+----------+
+|    102 |     69.5000 |        4 |
+|    101 |     68.0000 |        8 |
+|    201 |     61.7500 |        4 |
++--------+-------------+----------+
+
+
+okay so it's not what i want to learn, it's what i specifically want to work about.
+not like i wanna know all about quantum physics and radio frequencies and embedded system, rocket engineering, etc.. that is just that. you can nothing if you don't specify your field. It's about which part you will make an attribute to this world. 
+
+
+(equi join)
+mysql> select name, p.deptno, dname from professor as p, department as d whe
+re p.deptno = d.deptno;
++--------+--------+----------------+
+| name   | deptno | dname          |
++--------+--------+----------------+
+| 김도훈 |    101 | 컴퓨터공학과   |
+| 성연희 |    101 | 컴퓨터공학과   |
+| 이만식 |    101 | 컴퓨터공학과   |
+| 전은지 |    101 | 컴퓨터공학과   |
+| 염일웅 |    102 | 멀티미디어학과 |
+| 권혁일 |    102 | 멀티미디어학과 |
+| 이재우 |    201 | 전자공학과     |
+| 남은혁 |    202 | 기계공학과     |
++--------+--------+----------------+
+
+vs
+
+(inner join: does not include NULL)
+mysql> select p.name, p.deptno, d.dname from professor as p inner join department as d on p.deptno = d.deptno;
++--------+--------+----------------+
+| name   | deptno | dname          |
++--------+--------+----------------+
+| 김도훈 |    101 | 컴퓨터공학과   |
+| 성연희 |    101 | 컴퓨터공학과   |
+| 이만식 |    101 | 컴퓨터공학과   |
+| 전은지 |    101 | 컴퓨터공학과   |
+| 염일웅 |    102 | 멀티미디어학과 |
+| 권혁일 |    102 | 멀티미디어학과 |
+| 이재우 |    201 | 전자공학과     |
+| 남은혁 |    202 | 기계공학과     |
++--------+--------+----------------+
+
+vs 
+
+(outer join: include NULL)
+(left outer join: 왼쪽 데이터 다 나열)
+mysql> select p.name, p.deptno, d.dname from professor as p left outer join
+department as d on p.deptno = d.deptno;
++--------+--------+----------------+
+| name   | deptno | dname          |
++--------+--------+----------------+
+| 김도훈 |    101 | 컴퓨터공학과   |
+| 이재우 |    201 | 전자공학과     |
+| 성연희 |    101 | 컴퓨터공학과   |
+| 염일웅 |    102 | 멀티미디어학과 |
+| 권혁일 |    102 | 멀티미디어학과 |
+| 이만식 |    101 | 컴퓨터공학과   |
+| 전은지 |    101 | 컴퓨터공학과   |
+| 남은혁 |    202 | 기계공학과     |
++--------+--------+----------------+
+
+
+
+----prac
+mysql> select s.studno, s.name, s.deptno, d.dname, d.loc from student as s,
+department as d where s.deptno = d.deptno;
+
+mysql> select s.studno, s.name, s.deptno, d.dname, d.loc from student as s, department as d where s.deptno = d.deptno and s.deptno = 102 order by s.grad
+e;
+
+mysql> select s.name, s.grade, p.name, p.position from student as s, profess
+or as p where s.profno = p.profno;
+
+mysql> select s.name, s.grade, p.name, p.position from student as s left out
+er join professor as p on s.profno = p.profno;
